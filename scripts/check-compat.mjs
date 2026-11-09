@@ -119,7 +119,6 @@ const bundle = zlib
         dir: root,
         matrix,
         adapters: adaptersInUse,
-        env: Object.entries(process.env).map(([k, v]) => [k, Buffer.from(String(v), 'utf8').toString('base64')]),
       })
     )
   )

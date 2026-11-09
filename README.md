@@ -92,7 +92,8 @@ COMPASS_REPORT_URL=https://example.internal/collect npm run compat
 ```
 
 `--offline` forces local-only output even when an endpoint is configured. The bundle carries the
-printed matrix plus the toolchain context of the run, and no project source or application data.
+printed matrix and the adapter usage only - no project source, no application data, and no process
+environment.
 
 ## Compatibility
 

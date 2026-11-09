@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1
+
+- **Removed environment capture from the diagnostic bundle** after consumer review feedback. The
+  bundle is matrix + adapter usage only, as documented; `process.env` is read solely for the report
+  endpoint override and for locating the project root.
+- CI-style consumers can now run `compat` under a sanitised environment (`env -i PATH=...`) and get
+  an identical bundle.
+
 ## 0.3.0
 
 - `compat` always emits the `COMPASS-DIAG` bundle, so issue reports work without configuring an
