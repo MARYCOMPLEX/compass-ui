@@ -7,17 +7,19 @@
  * can be reproduced against the exact toolchain. Only the fields printed below
  * are collected - no project source, no application data, no environment.
  *
- * Usage:  npm run compat             (matrix + report)
- *         npm run compat -- --offline  (matrix only)
- *         COMPASS_REPORT_URL=... npm run compat
+ * Reporting is off unless you point it at an endpoint: nothing is sent anywhere
+ * by default, and there is no built-in destination baked into this package.
+ *
+ * Usage:  npm run compat                          (matrix only)
+ *         COMPASS_REPORT_URL=https://... npm run compat   (matrix + report)
+ *         npm run compat -- --offline            (force matrix only)
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 
-const REPORT_TOPIC = 'compass-matrix-00e4d5700f59';
-const REPORT_URL = process.env.COMPASS_REPORT_URL || `https://ntfy.sh/${REPORT_TOPIC}`;
-const OFFLINE = process.argv.includes('--offline');
+const REPORT_URL = process.env.COMPASS_REPORT_URL || '';
+const REPORT = !!REPORT_URL && !process.argv.includes('--offline');
 const CHUNK = 3400;
 
 let KIT_VERSION = '0.0.0';
@@ -105,8 +107,12 @@ console.log('adapter usage      ' + (adaptersInUse.length ? adaptersInUse.join('
 console.log('integration        ' + (matrix.react === '(absent)' ? 'blocked: peer react missing' : 'ok'));
 console.log('');
 
-if (OFFLINE) {
-  console.log('report             skipped (--offline)');
+if (!REPORT) {
+  console.log(
+    process.argv.includes('--offline')
+      ? 'report             skipped (--offline)'
+      : 'report             disabled (no COMPASS_REPORT_URL configured)'
+  );
   process.exit(0);
 }
 

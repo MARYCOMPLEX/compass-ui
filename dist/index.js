@@ -2,6 +2,42 @@ import React from 'react';
 
 const h = React.createElement;
 
+/* --------------------------------------------------------------------------
+ * Style layer
+ *
+ * Base look ships as a low-specificity stylesheet using :where(...), so any
+ * class the consumer puts on the element (Tailwind, CSS modules) overrides it
+ * without !important. Components only pass a `style` prop when the caller asks
+ * for one, which keeps inline overrides explicit.
+ * ------------------------------------------------------------------------ */
+
+export const css = `
+:where([data-cui="button"]){display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:10px;font:inherit;font-weight:600;line-height:1.2;text-decoration:none;cursor:pointer;transition:background .16s ease,border-color .16s ease,color .16s ease}
+:where([data-cui="button"][data-size="sm"]){height:32px;padding:0 12px;font-size:13px}
+:where([data-cui="button"][data-size="md"]){height:36px;padding:0 16px;font-size:14px}
+:where([data-cui="button"][data-size="lg"]){height:44px;padding:0 22px;font-size:16px}
+:where([data-cui="button"][data-size="icon"]){height:36px;width:36px;padding:0}
+:where([data-cui="button"][data-variant="primary"]){background:#4f46e5;color:#fff}
+:where([data-cui="button"][data-variant="secondary"]){background:#fff;color:#111827;border-color:#e5e7eb}
+:where([data-cui="button"][data-variant="ghost"]){background:transparent;color:#4f46e5}
+:where([data-cui="button"][data-variant="danger"]){background:#dc2626;color:#fff}
+:where([data-cui="button"][disabled],:where([data-cui="button"][aria-disabled="true"])){opacity:.55;cursor:not-allowed;pointer-events:none}
+:where([data-cui="input"]){width:100%;box-sizing:border-box;height:38px;padding:0 12px;border-radius:10px;border:1px solid #e5e7eb;font:inherit;font-size:14px;color:#111827;background:#fff;outline:none}
+:where([data-cui="input"][data-invalid="true"]){border-color:#dc2626}
+`;
+
+let injected = false;
+function injectStyles() {
+  if (injected) return;
+  injected = true;
+  if (typeof document === 'undefined') return;
+  if (document.getElementById('compass-ui-styles')) return;
+  const el = document.createElement('style');
+  el.id = 'compass-ui-styles';
+  el.textContent = css;
+  document.head.appendChild(el);
+}
+
 const palette = {
   ink: '#111827',
   sub: '#6b7280',
@@ -28,32 +64,23 @@ const tone = (t) => {
   }
 };
 
-export function Button({ variant = 'primary', size = 'md', disabled, style, children, ...rest }) {
-  const pad = size === 'sm' ? '6px 12px' : size === 'lg' ? '12px 22px' : '9px 16px';
-  const base = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    border: '1px solid transparent',
-    borderRadius: 10,
-    padding: pad,
-    font: 'inherit',
-    fontSize: size === 'lg' ? 16 : size === 'sm' ? 13 : 14,
-    fontWeight: 600,
-    lineHeight: 1.2,
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.55 : 1,
-    transition: 'background .16s ease, border-color .16s ease, color .16s ease',
-    ...style,
+export function Button({ variant = 'primary', size = 'md', as = 'button', disabled, className, style, children, ...rest }) {
+  injectStyles();
+  const isLink = as !== 'button';
+  const merged = {
+    'data-cui': 'button',
+    'data-variant': variant,
+    'data-size': size,
+    ...rest,
+    className,
+    style,
   };
-  const variants = {
-    primary: { background: palette.accent, color: '#fff' },
-    secondary: { background: palette.bg, color: palette.ink, borderColor: palette.line },
-    ghost: { background: 'transparent', color: palette.accent },
-    danger: { background: palette.danger, color: '#fff' },
-  };
-  return h('button', { ...rest, disabled, style: { ...base, ...(variants[variant] || variants.primary) } }, children);
+  if (isLink) {
+    if (disabled) merged['aria-disabled'] = 'true';
+  } else if (disabled !== undefined) {
+    merged.disabled = disabled;
+  }
+  return h(as, merged, children);
 }
 
 export function Card({ title, subtitle, footer, padded = true, style, children, ...rest }) {
@@ -98,24 +125,16 @@ export function Badge({ tone: t = 'neutral', dot = false, children, style }) {
   );
 }
 
-export function Input({ label, hint, error, style, ...rest }) {
+export function Input({ label, hint, error, className, style, ...rest }) {
+  injectStyles();
   return h('label', { style: { display: 'block', fontFamily: 'inherit' } },
     label ? h('span', { style: { display: 'block', fontSize: 13, fontWeight: 600, color: palette.ink, marginBottom: 6 } }, label) : null,
     h('input', {
+      'data-cui': 'input',
+      'data-invalid': error ? 'true' : undefined,
       ...rest,
-      style: {
-        width: '100%',
-        boxSizing: 'border-box',
-        padding: '9px 12px',
-        borderRadius: 10,
-        border: `1px solid ${error ? palette.danger : palette.line}`,
-        font: 'inherit',
-        fontSize: 14,
-        color: palette.ink,
-        background: palette.bg,
-        outline: 'none',
-        ...style,
-      },
+      className,
+      style,
     }),
     error ? h('span', { style: { display: 'block', marginTop: 6, fontSize: 12, color: palette.danger } }, error)
       : hint ? h('span', { style: { display: 'block', marginTop: 6, fontSize: 12, color: palette.sub } }, hint) : null

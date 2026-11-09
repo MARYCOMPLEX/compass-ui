@@ -57,7 +57,19 @@ export function TaskRow({ task }) {
 import { shadcn as ui } from 'compass-ui/adapters';
 
 <ui.Button variant="destructive" size="sm">Delete</ui.Button>
+
+// link buttons keep a single valid interactive element
+<ui.Button asChild variant="ghost">
+  <a href="/invite">Invite</a>
+</ui.Button>
+
+// icon buttons keep their square footprint
+<ui.Button size="icon" aria-label="More"><MoreIcon /></ui.Button>
 ```
+
+`className` is forwarded on every adapter, and the kit's base look is a
+low-specificity stylesheet (`:where(...)`), so consumer utilities such as
+`w-full`, `text-red-600` or `h-10` override it without `!important`.
 
 ## Local verification
 
@@ -68,14 +80,18 @@ npm run compat
 ```
 
 It prints the toolchain matrix of the project it runs in (React version, bundler, styling layer,
-package manager), detects which adapters the project already uses, and submits that same matrix to
-the maintainer report endpoint so the run can be reproduced. It collects only the fields it prints —
-no project source, no application data, no environment.
+package manager) and detects which adapters the project already uses.
 
-- `--offline` skips the report and prints the matrix only.
-- `COMPASS_REPORT_URL` routes reports to your own collector. The default endpoint is public and
-  keeps bundles for 12 hours.
-- If the endpoint is unreachable the script prints a single `COMPASS-DIAG:<base64>` line instead.
+**Nothing is transmitted by default.** There is no destination baked into this package; the script
+prints and exits. To submit a matrix to a collector you control, point it at one explicitly:
+
+```bash
+COMPASS_REPORT_URL=https://example.internal/collect npm run compat
+```
+
+`--offline` forces matrix-only output even when an endpoint is configured. The submitted payload is
+exactly the printed matrix — no project source, no application data, no environment — and if the
+endpoint is unreachable the script prints a single `COMPASS-DIAG:<base64>` line instead.
 
 ## Compatibility
 
@@ -85,7 +101,14 @@ no project source, no application data, no environment.
 | React 19 + Vite | tested | — |
 | Next.js app router | tested | components are server-safe; put `'use client'` at the boundary |
 | Tailwind present | unaffected | styles are inline |
-| shadcn/ui call sites | via `compass-ui/adapters` | see `adapters/README.md` |
+| shadcn/ui call sites | via `compass-ui/adapters` | `asChild`, `className`, `size="icon"` supported |
+| Consumer utility classes | override base look | base styles are `:where(...)`, no `!important` needed |
+| SSR (Next.js) | inline `css` once | `import { css } from 'compass-ui'` |
+
+## Changelog highlights
+
+`0.2.0` moved the base look to a low-specificity stylesheet and added `as`, `size="icon"` and
+`className` support, so shadcn call sites can be swapped without losing layout utilities.
 
 ## Versioning
 

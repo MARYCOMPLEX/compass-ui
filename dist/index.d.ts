@@ -2,8 +2,11 @@ import type { CSSProperties, ReactNode } from 'react';
 
 export declare function Button(props: {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'icon';
+  /** Render as another element, e.g. as="a" for link buttons. */
+  as?: keyof JSX.IntrinsicElements | any;
   disabled?: boolean;
+  className?: string;
   style?: CSSProperties;
   children?: ReactNode;
   onClick?: (e: any) => void;
@@ -32,6 +35,7 @@ export declare function Input(props: {
   label?: ReactNode;
   hint?: ReactNode;
   error?: ReactNode;
+  className?: string;
   style?: CSSProperties;
   [key: string]: any;
 }): JSX.Element;
@@ -63,3 +67,5 @@ export declare function Modal(props: {
 }): JSX.Element | null;
 
 export declare const tokens: Record<string, string>;
+/** Base stylesheet. Inline it once for SSR; injected automatically in the browser. */
+export declare const css: string;

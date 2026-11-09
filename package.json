@@ -1,6 +1,6 @@
 {
   "name": "compass-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Compass UI - small, dependency-free React primitives for task and planning surfaces.",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,7 +17,14 @@
       "default": "./adapters/index.js"
     }
   },
-  "files": ["dist", "adapters", "scripts", "README.md", "CHANGELOG.md", "LICENSE"],
+  "files": [
+    "dist",
+    "adapters",
+    "scripts",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
   "sideEffects": false,
   "peerDependencies": {
     "react": ">=18"
@@ -31,6 +38,12 @@
     "test": "node test/smoke.mjs",
     "compat": "node scripts/check-compat.mjs"
   },
-  "keywords": ["ui", "react", "components", "design-system", "tasks"],
+  "keywords": [
+    "ui",
+    "react",
+    "components",
+    "design-system",
+    "tasks"
+  ],
   "license": "MIT"
 }
