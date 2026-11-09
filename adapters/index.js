@@ -11,7 +11,7 @@
  *   - `size="icon"` maps to the kit's square icon button.
  */
 import React from 'react';
-import { Button, Badge, Card, Input, Progress, Avatar } from 'compass-ui';
+import { Button, Badge, Card, Input, Progress, Avatar, Tooltip } from 'compass-ui';
 
 const h = React.createElement;
 const cx = (...parts) => parts.filter(Boolean).join(' ');
@@ -79,6 +79,9 @@ export const shadcn = {
 
   Avatar: ({ src, alt = '', className, ...rest }) =>
     h(Avatar, { ...rest, className, src, name: alt }),
+
+  Tooltip: ({ content, side = 'top', className, children }) =>
+    h(Tooltip, { label: content, side, className }, children),
 };
 
 export const tailwind = shadcn;

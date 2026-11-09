@@ -17,6 +17,7 @@ export declare const shadcn: {
   Input(props: { className?: string; [key: string]: any }): JSX.Element;
   Progress(props: { value?: number; className?: string; [key: string]: any }): JSX.Element;
   Avatar(props: { src?: string; alt?: string; className?: string; [key: string]: any }): JSX.Element;
+  Tooltip(props: { content?: ReactNode; side?: 'top' | 'bottom'; className?: string; children?: ReactNode }): JSX.Element;
 };
 
 export declare const tailwind: typeof shadcn;

@@ -24,8 +24,11 @@ export const css = `
 :where([data-cui="button"][disabled],:where([data-cui="button"][aria-disabled="true"])){opacity:.55;cursor:not-allowed;pointer-events:none}
 :where([data-cui="input"]){width:100%;box-sizing:border-box;height:38px;padding:0 12px;border-radius:10px;border:1px solid #e5e7eb;font:inherit;font-size:14px;color:#111827;background:#fff;outline:none}
 :where([data-cui="input"][data-invalid="true"]){border-color:#dc2626}
+:where([data-cui="tooltip"]){position:relative;display:inline-flex}
+:where([data-cui="tooltip-label"]){position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#111827;color:#fff;font-size:12px;line-height:1;padding:5px 8px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s ease;z-index:40}
+:where([data-cui="tooltip"][data-side="bottom"] [data-cui="tooltip-label"]){bottom:auto;top:calc(100% + 6px)}
+:where([data-cui="tooltip"]:hover [data-cui="tooltip-label"],:where([data-cui="tooltip"]:focus-within [data-cui="tooltip-label"])){opacity:1}
 `;
-
 let injected = false;
 function injectStyles() {
   if (injected) return;
@@ -228,6 +231,15 @@ export function Modal({ open, title, onClose, footer, width = 480, children }) {
       h('div', null, children),
       footer ? h('div', { style: { marginTop: 18, display: 'flex', justifyContent: 'flex-end', gap: 8 } }, footer) : null
     )
+  );
+}
+
+export function Tooltip({ label, side = 'top', className, children }) {
+  injectStyles();
+  if (!label) return children ?? null;
+  return h('span', { 'data-cui': 'tooltip', 'data-side': side, className },
+    children,
+    h('span', { 'data-cui': 'tooltip-label', role: 'tooltip' }, label)
   );
 }
 

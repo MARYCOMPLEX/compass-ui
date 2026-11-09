@@ -13,7 +13,7 @@ const here = path.dirname(new URL(import.meta.url).pathname);
 const root = path.join(here, '..');
 const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 
-const EXPECTED = ['Button', 'Card', 'Badge', 'Input', 'Avatar', 'Spinner', 'Progress', 'Modal', 'tokens'];
+const EXPECTED = ['Button', 'Card', 'Badge', 'Input', 'Avatar', 'Spinner', 'Progress', 'Modal', 'Tooltip', 'tokens'];
 
 const src = read('dist/index.js');
 const dts = read('dist/index.d.ts');

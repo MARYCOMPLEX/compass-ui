@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+- `Tooltip`: CSS-only tooltip wrapper (`label`, `side`, `className`), no JS positioning, no deps.
+- `compass-ui/adapters`: `Tooltip` maps shadcn's `content` prop onto `label`.
+- README: component table completed.
+
 ## 0.2.0
 
 - **Base look moved to a low-specificity stylesheet** (`:where(...)`) exported as `css`. Consumer

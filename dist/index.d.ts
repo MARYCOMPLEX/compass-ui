@@ -66,6 +66,13 @@ export declare function Modal(props: {
   children?: ReactNode;
 }): JSX.Element | null;
 
+export declare function Tooltip(props: {
+  label?: ReactNode;
+  side?: 'top' | 'bottom';
+  className?: string;
+  children?: ReactNode;
+}): JSX.Element | null;
+
 export declare const tokens: Record<string, string>;
 /** Base stylesheet. Inline it once for SSR; injected automatically in the browser. */
 export declare const css: string;

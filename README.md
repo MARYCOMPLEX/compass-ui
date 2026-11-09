@@ -47,6 +47,7 @@ export function TaskRow({ task }) {
 | `Spinner` | `size`, `color`, `label` |
 | `Progress` | `value`, `max`, `tone`, `height` |
 | `Modal` | `open`, `title`, `onClose`, `footer`, `width` |
+| `Tooltip` | `label`, `side` (`top` \| `bottom`), `className` |
 | `tokens` | colour palette object |
 
 ## Adapters

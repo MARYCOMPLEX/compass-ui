@@ -1,6 +1,6 @@
 {
   "name": "compass-ui",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Compass UI - small, dependency-free React primitives for task and planning surfaces.",
   "type": "module",
   "main": "./dist/index.js",
