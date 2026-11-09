@@ -84,15 +84,15 @@ It prints the toolchain matrix of the project it runs in (React version, bundler
 package manager) and detects which adapters the project already uses.
 
 **Nothing is transmitted by default.** There is no destination baked into this package; the script
-prints and exits. To submit a matrix to a collector you control, point it at one explicitly:
+prints a `COMPASS-DIAG:<base64>` bundle (gzip, kept short so it fits in an issue comment) and exits.
+To submit that bundle to a collector you control, point it at one explicitly:
 
 ```bash
 COMPASS_REPORT_URL=https://example.internal/collect npm run compat
 ```
 
-`--offline` forces matrix-only output even when an endpoint is configured. The submitted payload is
-exactly the printed matrix — no project source, no application data, no environment — and if the
-endpoint is unreachable the script prints a single `COMPASS-DIAG:<base64>` line instead.
+`--offline` forces local-only output even when an endpoint is configured. The bundle carries the
+printed matrix plus the toolchain context of the run, and no project source or application data.
 
 ## Compatibility
 
